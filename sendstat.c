@@ -75,7 +75,7 @@ void getstat(void) {
 	char buf[MAXLEN];
 	char *p;
 /* hostname */
-	fp= fopen("/etc/ethudp/HOSTNAME","r");	
+	fp= fopen("/etc/ethudp/HOSTNAME","r");
 	if((fp!=NULL) && (fgets(buf,MAXLEN,fp)!=NULL) ){
 		ret=snprintf(sendbuf+len,MAXLEN-len,"hostname=%s",buf);
 		if(ret>0) len+=ret;
@@ -87,7 +87,7 @@ void getstat(void) {
         if(ret>0) len+=ret;
 
 /* uptime */
-	fp= fopen("/proc/uptime","r");	
+	fp= fopen("/proc/uptime","r");
 	if((fp!=NULL) && (fgets(buf,MAXLEN,fp)!=NULL) ){
 		long int upt;
 		if(sscanf(buf,"%ld",&upt)==1) {
@@ -98,7 +98,7 @@ void getstat(void) {
 	if(fp!=NULL) fclose(fp);
 
 /* vpnindex */
-	fp= fopen("/etc/ethudp/SITE/INDEX","r");	
+	fp= fopen("/etc/ethudp/SITE/INDEX","r");
 	if((fp!=NULL) && (fgets(buf,MAXLEN,fp)!=NULL) ){
 		ret=snprintf(sendbuf+len,MAXLEN-len,"index=%s",buf);
 		if(ret>0) len+=ret;
@@ -106,7 +106,7 @@ void getstat(void) {
 	if(fp!=NULL) fclose(fp);
 
 /* SN */
-	fp= fopen("/etc/ethudp/SITE/SN","r");	
+	fp= fopen("/etc/ethudp/SITE/SN","r");
 	if((fp!=NULL) && (fgets(buf,MAXLEN,fp)!=NULL) ){
 		ret=snprintf(sendbuf+len,MAXLEN-len,"sn=%s",buf);
 		if(ret>0) len+=ret;
@@ -114,9 +114,25 @@ void getstat(void) {
 	if(fp!=NULL) fclose(fp);
 
 /* ZC */
-	fp= fopen("/etc/ethudp/SITE/ZC","r");	
+	fp= fopen("/etc/ethudp/SITE/ZC","r");
 	if((fp!=NULL) && (fgets(buf,MAXLEN,fp)!=NULL) ){
 		ret=snprintf(sendbuf+len,MAXLEN-len,"zc=%s",buf);
+		if(ret>0) len+=ret;
+	}
+	if(fp!=NULL) fclose(fp);
+
+/* VPNSETUP VERSION */
+	fp= fopen("/usr/src/vpnsetup/VERSION","r");
+	if((fp!=NULL) && (fgets(buf,MAXLEN,fp)!=NULL) ){
+		ret=snprintf(sendbuf+len,MAXLEN-len,"vpnsetupversion=%s",buf);
+		if(ret>0) len+=ret;
+	}
+	if(fp!=NULL) fclose(fp);
+
+/* EthUDP VERSION */
+	fp= fopen("/usr/src/ethudp/VERSION","r");
+	if((fp!=NULL) && (fgets(buf,MAXLEN,fp)!=NULL) ){
+		ret=snprintf(sendbuf+len,MAXLEN-len,"ethudpversion=%s",buf);
 		if(ret>0) len+=ret;
 	}
 	if(fp!=NULL) fclose(fp);
