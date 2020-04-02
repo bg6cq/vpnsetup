@@ -10,7 +10,7 @@ curl http://ctos.ustc.edu.cn/epel.repo.6 > epel.repo
 cd /etc/pki/rpm-gpg/
 curl http://ctos.ustc.edu.cn/epel/RPM-GPG-KEY-EPEL-6 > RPM-GPG-KEY-EPEL
 yum update -y
-yum install -y gcc git lz4-devel openssl-devel dialog tcpdump ntpdate
+yum install -y gcc git lz4-devel openssl-devel dialog tcpdump ntpdate libpcap-devel
 yum install -y telnet bind-utils traceroute gd-devel httpd
 
 chkconfig httpd on
@@ -22,6 +22,12 @@ sed -i -e "s/dhcp/static/" /etc/sysconfig/network-scripts/ifcfg-eth0
 cd /usr/src
 git clone https://github.com/bg6cq/ethudp.git
 cd ethudp
+make
+
+#install udptest
+cd /usr/src
+git clone https://github.com/bg6cq/udptest.git
+cd udptest
 make
 
 #install vpnsetup
