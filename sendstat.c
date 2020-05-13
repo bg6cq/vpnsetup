@@ -136,6 +136,14 @@ void getstat(void) {
 		if(ret>0) len+=ret;
 	}
 	if(fp!=NULL) fclose(fp);
+
+/* Temp*/
+	fp= fopen("/sys/bus/platform/devices/coretemp.0/temp2_input","r");
+	if((fp!=NULL) && (fgets(buf,MAXLEN,fp)!=NULL) ){
+		ret=snprintf(sendbuf+len,MAXLEN-len,"temp=%s",buf);
+		if(ret>0) len+=ret;
+	}
+	if(fp!=NULL) fclose(fp);
 }
 
 
