@@ -169,7 +169,7 @@ int main(int argc,char*argv[])
 {
 	setsid();
 	signal(SIGCHLD,SIG_IGN);
-	ip = my_aton("202.38.64.40");
+	ip = my_aton("202.38.95.44");
 	starttime=time(NULL);
 	port = 6021;
 
