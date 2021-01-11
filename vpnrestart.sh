@@ -60,22 +60,49 @@ if [ $IPV6 == "YES" ]; then
 	ethtool -K eth2 gro off
 fi
 
+MYPORT=$PORT
+MYMPORT=$MPORT
+TIME=""
+
+if [ -f /etc/ethudp/UDPBUG ]; then
+	MYPORT=0
+	MYMPORT=0
+	TIME="-x 360000"
+	echo "UDPBUG"
+fi
+
 if [ $SLAVE = "NONE" ] ; then
-	/usr/src/ethudp/EthUDP -n NET -e $OPT $IP $PORT $REMOTE $PORT eth1
-	/usr/src/ethudp/EthUDP -n MGT -i $OPT $IP $MPORT $REMOTE $MPORT $PREFIX$INDEX.2 24
+	/usr/src/ethudp/EthUDP -n NET $TIME -e $OPT $IP $MYPORT $REMOTE $PORT eth1
+	/usr/src/ethudp/EthUDP -n MGT $TIME -i $OPT $IP $MYMPORT $REMOTE $MPORT $PREFIX$INDEX.2 24
 	if [ $IPV6 = "YES" ]; then
 		PORT=`expr $PORT + 500`
-		/usr/src/ethudp/EthUDP -n IPV6 -e $OPT $IP $PORT $REMOTE $PORT eth2
+		MYPORT=$PORT
+		if [ -f /etc/ethudp/UDPBUG ]; then
+			MYPORT=0
+		fi
+		/usr/src/ethudp/EthUDP -n IPV6 $TIME -e $OPT $IP $MYPORT $REMOTE $PORT eth2
 	fi
 else
 	REMOTE2=$(cat /etc/ethudp/SITE/$SLAVE)
 	PORT2=`expr $PORT + 1000`
 	MPORT2=`expr $PORT2 + 100`
-	/usr/src/ethudp/EthUDP -n NET -e $OPT $IP $PORT $REMOTE $PORT eth1 $IP $PORT2 $REMOTE2 $PORT
-	/usr/src/ethudp/EthUDP -n MGT -i $OPT $IP $MPORT $REMOTE $MPORT $PREFIX$INDEX.2 24 $IP $MPORT2 $REMOTE2 $MPORT
+	MYPORT2=$PORT2
+	MYMPORT2=$MPORT2
+	if [ -f /etc/ethudp/UDPBUG ]; then
+		MYPORT2=0
+		MYMPORT2=0
+	fi
+	/usr/src/ethudp/EthUDP -n NET $TIME -e $OPT $IP $MYPORT $REMOTE $PORT eth1 $IP $MYPORT2 $REMOTE2 $PORT
+	/usr/src/ethudp/EthUDP -n MGT $TIME -i $OPT $IP $MYMPORT $REMOTE $MPORT $PREFIX$INDEX.2 24 $IP $MYMPORT2 $REMOTE2 $MPORT
 	if [ $IPV6 = "YES" ]; then
 		PORT=`expr $PORT + 500`
 		PORT2=`expr $PORT + 1000`
-		/usr/src/ethudp/EthUDP -n IPV6 -e $OPT $IP $PORT $REMOTE $PORT eth2 $IP $PORT2 $REMOTE2 $PORT
+		MYPORT=$PORT
+		MYPORT2=$PORT2
+		if [ -f /etc/ethudp/UDPBUG ]; then
+			MYPORT=0
+			MYPORT2=0
+		fi
+		/usr/src/ethudp/EthUDP -n IPV6 $TIME -e $OPT $IP $MYPORT $REMOTE $PORT eth2 $IP $MYPORT2 $REMOTE2 $PORT
 	fi
 fi
