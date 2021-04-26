@@ -172,7 +172,7 @@ void getstat(void)
 		fclose(fp);
 
 /* IP */
-	fp = fopen("/usr/src/ethudp/IP", "r");
+	fp = fopen("/etc/ethudp/IP", "r");
 	if ((fp != NULL) && (fgets(buf, MAXLEN, fp) != NULL)) {
 		ret = snprintf(sendbuf + len, MAXLEN - len, "ip=%s", buf);
 		if (ret > 0)
@@ -182,7 +182,7 @@ void getstat(void)
 		fclose(fp);
 
 /* GATE */
-	fp = fopen("/usr/src/ethudp/GATE", "r");
+	fp = fopen("/etc/ethudp/GATE", "r");
 	if ((fp != NULL) && (fgets(buf, MAXLEN, fp) != NULL)) {
 		ret = snprintf(sendbuf + len, MAXLEN - len, "gate=%s", buf);
 		if (ret > 0)
